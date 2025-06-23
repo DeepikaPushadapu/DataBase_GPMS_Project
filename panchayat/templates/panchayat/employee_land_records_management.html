@@ -1,0 +1,210 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Land Records Management - Employee Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .land-records-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .land-records-table th, .land-records-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .land-records-table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        .land-records-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        .land-record-actions {
+            text-align: center;
+        }
+        .land-record-actions a, .land-record-actions button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+        .land-record-actions a:hover, .land-record-actions button:hover {
+            background-color: #219150;
+        }
+        .new-land-record-form {
+            margin-top: 30px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .new-land-record-form h2 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .new-land-record-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .new-land-record-form input[type="text"], .new-land-record-form input[type="number"], .new-land-record-form select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .new-land-record-form button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .new-land-record-form button:hover {
+            background-color: #219150;
+        }
+        .message { padding: 10px; margin-bottom: 15px; border-radius: 4px; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .back-button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .back-button:hover {
+            background-color: #219150;
+        }
+        .search-form {
+            margin-bottom: 20px;
+        }
+        .search-form input[type="text"] {
+            padding: 8px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .search-form button {
+            padding: 8px 15px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .search-form button:hover {
+            background-color: #219150;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 style="background-color: #27ae60; color: white; padding: 10px; border-radius: 5px;">Land Records Management</h1>
+        </div>
+
+        <!-- Add search form -->
+        <form class="search-form" method="GET" action="{% url 'employee_land_records_management' employee_id %}">
+            <input type="text" name="search" placeholder="Search by Land ID or Owner Name" value="{{ search_query }}">
+            <button type="submit">Search</button>
+        </form>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <table class="land-records-table">
+            <thead>
+                <tr>
+                    <th>Land ID</th>
+                    <th>Owner ID(Citizen Name)</th>
+                    <th>Area (Acres)</th>
+                    <th>Crop Type</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in land_records %}
+                <tr>
+                    <td>{{ record.land_id }}</td>
+                    <td>{{ record.citizen_id }} ({{ record.citizen_name }})</td>
+                    <td>{{ record.area_acres }}</td>
+                    <td>{{ record.crop_type }}</td>
+                    <td class="land-record-actions">
+                        <a href="{% url 'employee_land_records_edit' record.land_id employee_id %}">Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="new-land-record-form">
+            <h2 style="background-color: #27ae60; color: white; padding: 10px; border-radius: 5px;">Add New Land Record</h2>
+            <form method="post" action="{% url 'employee_land_records_management' employee_id %}">
+                {% csrf_token %}
+                <label for="citizen_id">Owner (Citizen ID):</label>
+                <select id="citizen_id" name="citizen_id" required>
+                    {% for citizen in citizens %}
+                    <option value="{{ citizen.citizen_id }}">{{ citizen.citizen_id }} ({{ citizen.name }})</option>
+                    {% endfor %}
+                </select>
+
+                <label for="area_acres">Area (Acres):</label>
+                <input type="number" id="area_acres" name="area_acres" step="0.01" required>
+
+                <label for="crop_type">Crop Type:</label>
+                <input type="text" id="crop_type" name="crop_type" required>
+
+                <button type="submit">Add Record</button>
+            </form>
+        </div>
+        <a href="{% url 'employee_dashboard' employee_id %}" class="back-button">Back to Dashboard</a>
+    </div>
+</body>
+</html>

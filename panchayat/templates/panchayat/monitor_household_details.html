@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Household Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #27ae60;
+        }
+        .household-info, .members-list {
+            margin-bottom: 20px;
+        }
+        .household-info p {
+            margin: 5px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .back-button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .back-button:hover {
+            background-color: #219150;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="background-color: #27ae60; color: white; padding: 10px; border-radius: 5px;">Household Details</h1>
+        <div class="household-info">
+            <h2>Household Information</h2>
+            <p><strong>Household ID:</strong> {{ household.household_id }}</p>
+            <p><strong>Address:</strong> {{ household.address }}</p>
+            <p><strong>Income:</strong> {{ household.income }}</p>
+        </div>
+        <div class="members-list">
+            <h2>Household Members</h2>
+            <table>
+                <tr>
+                    <th>Citizen ID</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Date of Birth</th>
+                    <th>Educational Qualification</th>
+                </tr>
+                {% for member in members %}
+                <tr>
+                    <td>{{ member.citizen_id }}</td>
+                    <td>{{ member.name }}</td>
+                    <td>{{ member.gender }}</td>
+                    <td>{{ member.dob }}</td>
+                    <td>{{ member.educational_qualification }}</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        <a href="{% url 'monitor_households' monitor_id%}" class="back-button">Back</a>
+    </div>
+</body>
+</html>

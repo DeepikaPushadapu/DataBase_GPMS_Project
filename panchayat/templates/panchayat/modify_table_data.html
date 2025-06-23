@@ -1,0 +1,237 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modify {{ table_name }} Data - Admin Dashboard</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        body {
+            background-color: #f5f5f5;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .dashboard-header {
+            background-color: #27ae60;
+            color: white;
+            padding: 20px;
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+        }
+        .user-info img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .logout-btn {
+            background-color: white;
+            color: #27ae60;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+        .logout-btn:hover {
+            background-color: #f0f0f0;
+        }
+        .dashboard-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 0 0 5px 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        .search-form, .add-form {
+            margin-bottom: 20px;
+            background-color: #f0f8ff;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+        .search-form:hover, .add-form:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        .search-form input[type="text"], .add-form input[type="text"], .add-form input[type="date"] {
+            width: calc(100% - 120px);
+            padding: 8px;
+            margin-right: 10px;
+            border: 1px solid #d0e3f0;
+            border-radius: 4px;
+        }
+        button {
+            padding: 8px 15px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #219653;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+            color: #27ae60;
+        }
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+        input[type="text"], input[type="date"] {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #d0e3f0;
+            border-radius: 4px;
+            transition: border-color 0.3s ease;
+        }
+        input[type="text"]:focus, input[type="date"]:focus {
+            border-color: #27ae60;
+            outline: none;
+        }
+        .actions button {
+            margin-right: 5px;
+        }
+        .actions button[value="delete"] {
+            background-color: #e74c3c;
+        }
+        .actions button[value="delete"]:hover {
+            background-color: #c0392b;
+        }
+        .back-btn {
+            display: inline-block;
+            padding: 10px 15px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+        .back-btn:hover {
+            background-color: #2980b9;
+        }
+        .readonly {
+            background-color: #f0f0f0;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    {% load custom_filters %}
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <div class="user-info">
+                <img src="{% static 'images/admin-placeholder.png' %}" alt="Admin" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'40\' height=\'40\' viewBox=\'0 0 24 24\' fill=\'none\' stroke=\'%23ffffff\' stroke-width=\'2\' stroke-linecap=\'round\' stroke-linejoin=\'round\'%3E%3Cpath d=\'M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2\'%3E%3C/path%3E%3Ccircle cx=\'12\' cy=\'7\' r=\'4\'%3E%3C/circle%3E%3C/svg%3E'">
+                <div>
+                    <h3>Welcome, Admin</h3>
+                </div>
+            </div>
+            <a href="{% url 'login' %}" class="logout-btn">Logout</a>
+        </div>
+        
+        <div class="dashboard-content">
+            {% if messages %}
+    <div class="messages">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+            <h2>Modify {{ table_name }} Data</h2>
+            
+            <form method="get" class="search-form">
+                <input type="text" name="search" value="{{ search_query }}" placeholder="Search...">
+                <button type="submit">Search</button>
+            </form>
+
+            <form method="post" class="add-form">
+                {% csrf_token %}
+                {% for column in columns %}
+                    {% if column != primary_key_column %}
+                        {% if column == 'installation_date' %}
+                            <input type="date" name="{{ column }}" placeholder="{{ column }}">
+                        {% else %}
+                            <input type="text" name="{{ column }}" placeholder="{{ column }}">
+                        {% endif %}
+                    {% endif %}
+                {% endfor %}
+                <button type="submit" name="action" value="add">Add New Row</button>
+            </form>
+            
+            <h3>Existing Data</h3>
+            
+            {% for row in data %}
+            <form method="post">
+                {% csrf_token %}
+                <table>
+                    <thead>
+                        <tr>
+                            {% for column in columns %}
+                                <th>{{ column }}</th>
+                            {% endfor %}
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            {% for column in columns %}
+                                <td>
+                                {% if column == primary_key_column %}
+                                    <input type="text" name="{{ column }}" value="{{ row|get_item:column }}" readonly class="readonly">
+                                {% elif column == 'installation_date' %}
+                                    <input type="date" name="{{ column }}" value="{{ row|get_item:column|date:'Y-m-d' }}">
+                                {% else %}
+                                    <input type="text" name="{{ column }}" value="{{ row|get_item:column }}">
+                                {% endif %}
+                                </td>
+                            {% endfor %}
+                            <td class="actions">
+                                <input type="hidden" name="id" value="{{ row|get_item:primary_key_column }}">
+                                <button type="submit" name="action" value="update">Update</button>
+                                <button type="submit" name="action" value="delete">Delete</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+            {% endfor %}
+
+            <a href="{% url 'custom_admin_dashboard' %}" class="back-btn">Back to Dashboard</a>
+        </div>
+    </div>
+</body>
+</html>

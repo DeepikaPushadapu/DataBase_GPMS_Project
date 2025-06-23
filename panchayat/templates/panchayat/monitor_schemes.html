@@ -1,0 +1,92 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor Schemes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        .scheme-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .scheme-item {
+            background-color: #f4f4f4;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .scheme-item a {
+            color: #333;
+            text-decoration: none;
+        }
+        .scheme-item a:hover {
+            color: #0066cc;
+        }
+        .search-form {
+            margin-bottom: 20px;
+        }
+        .search-form input[type="text"] {
+            padding: 8px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .search-form button {
+            padding: 8px 15px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .search-form button:hover {
+            background-color: #219150;
+        }
+        .back-button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .back-button:hover {
+            background-color: #219150;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="background-color: #27ae60; color: white; padding: 10px; border-radius: 5px;">Welfare Schemes</h1>
+    
+    <!-- Add search form -->
+    <form class="search-form" method="GET" action="">
+        <input type="text" name="search" placeholder="Search schemes" value="{{ search_query }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <ul class="scheme-list">
+        {% for scheme in schemes %}
+            <li class="scheme-item">
+                <a href="{% url 'monitor_scheme_details' scheme.scheme_id monitor_id %}">
+                    {{ scheme.name }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'monitor_dashboard' monitor_id %}" class="back-button">Back to Dashboard</a>
+</body>
+</html>

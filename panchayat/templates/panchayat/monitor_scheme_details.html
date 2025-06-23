@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scheme Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+        }
+        h1, h2 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #27ae60;
+            color: white;
+        }
+        .search-form {
+            margin-bottom: 20px;
+        }
+        .search-form input[type="text"] {
+            padding: 8px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .search-form button {
+            padding: 8px 15px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .search-form button:hover {
+            background-color: #219150;
+        }
+        .back-button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .back-button:hover {
+            background-color: #219150;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="background-color: #27ae60; color: white; padding: 10px; border-radius: 5px;">{{ scheme.name }}</h1>
+    <p><strong>Description:</strong> {{ scheme.description }}</p>
+    <p><strong>Eligibility:</strong> {{ scheme.eligibility }}</p>
+
+    <h2 style="background-color: #27ae60; color: white; padding: 10px; border-radius: 5px;">Enrolled Citizens</h2>
+    
+    <!-- Add search form -->
+    <form class="search-form" method="GET" action="">
+        <input type="text" name="search" placeholder="Search enrollments" value="{{ search_query }}">
+        <button type="submit">Search</button>
+    </form>
+
+    <table>
+        <tr>
+            <th>Enrollment ID</th>
+            <th>Citizen ID</th>
+            <th>Name</th>
+            <th>Gender</th>
+            <th>Date of Birth</th>
+            <th>Educational Qualification</th>
+            <th>Enrollment Date</th>
+        </tr>
+        {% for enrollment in enrollments %}
+            <tr>
+                <td>{{ enrollment.enrollment_id }}</td>
+                <td>{{ enrollment.citizen_id }}</td>
+                <td>{{ enrollment.name }}</td>
+                <td>{{ enrollment.gender }}</td>
+                <td>{{ enrollment.dob }}</td>
+                <td>{{ enrollment.educational_qualification }}</td>
+                <td>{{ enrollment.enrollment_date }}</td>
+            </tr>
+        {% endfor %}
+    </table>
+    <a href="{% url 'monitor_schemes' monitor_id %}"class= " back-button">Back to schemes</a>
+</body>
+</html>

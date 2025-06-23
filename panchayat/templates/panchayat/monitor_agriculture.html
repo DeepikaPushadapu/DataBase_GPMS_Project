@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agriculture Monitor</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #27ae60;
+        }
+        .search-form {
+            margin-bottom: 20px;
+        }
+        .search-form input, .search-form button {
+            padding: 5px 10px;
+        }
+        .search-form button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .summary {
+            margin-top: 30px;
+        }
+        .chart-container {
+            width: 400px;
+            margin: 20px auto;
+        }
+        .back-button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .back-button:hover {
+            background-color: #219150;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="background-color: #27ae60; color: white; padding: 10px; border-radius: 5px;">Agriculture Monitor</h1>
+        
+        <form class="search-form" method="GET">
+            <input type="text" name="crop_type" placeholder="Search by Crop Type">
+            <button type="submit">Search</button>
+        </form>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Land Record ID</th>
+                    <th>Owner</th>
+                    <th>Crop Type</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for record in land_records %}
+                <tr>
+                    <td>{{ record.land_id }}</td>
+                    <td>{{ record.owner_name }}</td>
+                    <td>{{ record.crop_type }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="summary">
+            <h2>Crop Type Summary</h2>
+            {% for crop, count in crop_summary.items %}
+                <p>{{ crop }}: {{ count }}</p>
+            {% endfor %}
+        </div>
+
+        <div class="chart-container">
+            <canvas id="cropChart"></canvas>
+        </div>
+        <a href="{% url 'monitor_dashboard' monitor_id %}" class="back-button">Back to Dashboard</a>
+    </div>
+
+    <script>
+        var ctx = document.getElementById('cropChart').getContext('2d');
+        var cropChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: {{ crop_labels|safe }},
+                datasets: [{
+                    data: {{ crop_data }},
+                    backgroundColor: [
+                        '#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF', '#FF9F40'
+                    ]
+                }]
+            },
+            options: {
+                responsive: true,
+                title: {
+                    display: true,
+                    text: 'Crop Type Distribution'
+                }
+            }
+        });
+    </script>
+</body>
+</html>

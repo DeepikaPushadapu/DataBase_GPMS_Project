@@ -1,0 +1,78 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welfare Schemes - Gram Panchayat</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            color: #27ae60;
+            margin-bottom: 20px;
+        }
+        .scheme {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .scheme h3 {
+            color: #333;
+            margin-top: 0;
+        }
+        .scheme p {
+            margin: 10px 0;
+        }
+        .back-button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .back-button:hover {
+            background-color: #219150;
+        }
+    </style>
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h2>Available Welfare Schemes</h2>
+        {% for scheme in welfare_schemes %}
+            <div class="scheme">
+                <h3>{{ scheme.name }}</h3>
+                <p><strong>Scheme ID:</strong> {{ scheme.scheme_id }}</p>
+                <p><strong>Description:</strong> {{ scheme.description }}</p>
+                <p><strong>Eligibility:</strong> {{ scheme.eligibility }}</p>
+            </div>
+        {% empty %}
+            <p>No welfare schemes available at the moment.</p>
+        {% endfor %}
+        <button onclick="goBack()" class="back-button">Back to Dashboard</button>
+    </div>
+</body>
+</html>

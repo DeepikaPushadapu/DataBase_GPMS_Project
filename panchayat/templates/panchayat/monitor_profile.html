@@ -1,0 +1,66 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor Profile</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        .profile-info {
+            margin-bottom: 20px;
+        }
+        .profile-info p {
+            margin: 10px 0;
+        }
+        .label {
+            font-weight: bold;
+            display: inline-block;
+            width: 200px;
+        }
+        .back-button {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="background-color: #27ae60; color: white; padding: 10px; border-radius: 5px;">Monitor Profile</h1>
+        <div class="profile-info">
+            <p><span class="label">Monitor ID:</span> {{ monitor.monitor_id }}</p>
+            <p><span class="label">Name:</span> {{ monitor.name }}</p>
+            <p><span class="label">Gender:</span> {{ monitor.gender }}</p>
+            <p><span class="label">Date of Birth:</span> {{ monitor.dob }}</p>
+            <p><span class="label">Educational Qualification:</span> {{ monitor.educational_qualification }}</p>
+            <p><span class="label">Phone Number:</span> {{ monitor.phone_number }}</p>
+        </div>
+        <a href="{% url 'monitor_dashboard' monitor.monitor_id %}" class="back-button">Back to Dashboard</a>
+    </div>
+</body>
+</html>

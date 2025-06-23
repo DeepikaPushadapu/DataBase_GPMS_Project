@@ -1,0 +1,97 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Household - Employee Dashboard</title>
+   <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .citizen-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .citizen-header {
+            margin-bottom: 20px;
+        }
+        .citizen-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .citizen-info {
+            margin-bottom: 30px;
+        }
+        .citizen-info-item {
+            margin-bottom: 15px;
+            font-size: 18px;
+            color: #333;
+            line-height: 1.4;
+        }
+        .citizen-info-item strong {
+            font-weight: bold;
+            display: inline-block;
+            width: 220px;
+        }
+        .back-button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .back-button:hover {
+            background-color: #219150;
+        }
+    </style>
+</head>
+<body>
+    <div class="citizen-container">
+        <div class="citizen-header">
+            <h1 style="background-color: #27ae60; color: white; padding: 10px; border-radius: 5px;">Edit Household</h1>
+        </div>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post">
+            {% comment %} <form method="POST" action="{% url 'employee_household_management' employee_id %}"> {% endcomment %}
+            {% csrf_token %}
+
+            <div class="citizen-info">
+                <div class="citizen-info-item">
+                    <strong>Address:</strong>
+                    <input type="text" id="address" name="address" value="{{ household.address }}" required>
+                </div>
+
+                <div class="citizen-info-item">
+                    <strong>Income:</strong>
+                    <input type="number" id="income" name="income" value="{{ household.income }}" required>
+                </div>
+            </div>
+
+            <button type="submit" class="back-button">Save Changes</button>
+            <a href="{% url 'employee_household_management' employee_id %}" class="back-button">Cancel</a>
+        </form>
+    </div>
+</body>
+</html>

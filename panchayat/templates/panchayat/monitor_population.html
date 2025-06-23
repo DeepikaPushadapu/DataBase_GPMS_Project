@@ -1,0 +1,168 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Population Statistics</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 100px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #27ae60;
+        }
+        .stat-box {
+            background-color: #f0f8ff;
+            border: 1px solid #d0e3f0;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+        .stat-box:hover {
+            background-color: #e0f0ff;
+        }
+        .chart-container {
+            margin-top: 30px;
+        }
+        .search-form button {
+            padding: 8px 15px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .search-form button:hover {
+            background-color: #219150;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #27ae60;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .back-button:hover {
+            background-color: #219150;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="background-color: #27ae60; color: white; padding: 10px; border-radius: 5px;" >Population Statistics</h1>
+        <div class="stat-box" onclick="location.href='{% url 'monitor_population_male' monitor_id %}'">
+            <h2>Male Population</h2>
+            <p>Total: {{ male_count }}</p>
+        </div>
+        <div class="stat-box" onclick="location.href='{% url 'monitor_population_female' monitor_id %}'">
+            <h2>Female Population</h2>
+            <p>Total: {{ female_count }}</p>
+        </div>
+        <div class="chart-container">
+            <canvas id="genderChart"></canvas>
+        </div>
+
+        <h1>Age Group Statistics</h1>
+        <div class="stat-box" onclick="location.href='{% url 'monitor_population_children' monitor_id %}'">
+            <h2>Children (< 18)</h2>
+            <p>Total: {{ children_count }}</p>
+        </div>
+        <div class="stat-box" onclick="location.href='{% url 'monitor_population_adults' monitor_id%}'">
+            <h2>Adults (18 - 60)</h2>
+            <p>Total: {{ adults_count }}</p>
+        </div>
+        <div class="stat-box" onclick="location.href='{% url 'monitor_population_elderly' monitor_id%}'">
+            <h2>Elderly (> 60)</h2>
+            <p>Total: {{ elderly_count }}</p>
+        </div>
+        <div class="chart-container">
+            <canvas id="ageGroupChart"></canvas>
+        </div>
+        <a href="{% url 'monitor_dashboard' monitor_id %}" class="back-button">Back to Dashboard</a>
+    </div>
+
+    <script>
+        var ctx = document.getElementById('genderChart').getContext('2d');
+        var genderChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['Male', 'Female'],
+                datasets: [{
+                    label: 'Population',
+                    data: [{{ male_count }}, {{ female_count }}],
+                    backgroundColor: [
+                        'rgba(54, 162, 235, 0.6)',
+                        'rgba(255, 99, 132, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Gender Distribution'
+                    }
+                }
+            }
+        });
+
+        var ageCtx = document.getElementById('ageGroupChart').getContext('2d');
+        var ageGroupChart = new Chart(ageCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Children (< 18)', 'Adults (18 - 60)', 'Elderly (> 60)'],
+                datasets: [{
+                    data: [{{ children_count }}, {{ adults_count }}, {{ elderly_count }}],
+                    backgroundColor: [
+                        'rgba(255, 206, 86, 0.6)',
+                        'rgba(75, 192, 192, 0.6)',
+                        'rgba(153, 102, 255, 0.6)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Age Group Distribution'
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

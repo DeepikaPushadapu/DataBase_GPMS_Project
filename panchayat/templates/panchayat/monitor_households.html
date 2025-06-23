@@ -1,0 +1,94 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monitor Households</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            color: #27ae60;
+        }
+        .search-form {
+            margin-bottom: 20px;
+        }
+        .search-form input {
+            padding: 5px;
+            width: 200px;
+        }
+        .search-form button {
+            padding: 5px 10px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .household-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .household-item {
+            background-color: #f0f8ff;
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .household-item:hover {
+            background-color: #e0f0ff;
+        }
+        .back-button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .back-button:hover {
+            background-color: #219150;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="background-color: #27ae60; color: white; padding: 10px; border-radius: 5px;">Households</h1>
+        
+        <form class="search-form" method="GET" action="{% url 'monitor_households' monitor_id %}">
+            <input type="number" name="household_id" placeholder="Search by Household ID">
+            <button type="submit">Search</button>
+        </form>
+
+        <ul class="household-list">
+            {% for household in households %}
+                <li class="household-item" onclick="location.href='{% url 'monitor_household_details' household.household_id monitor_id %}'">
+                    <strong>ID:</strong> {{ household.household_id }} <br>
+                    <strong>Address:</strong> {{ household.address }} <br>
+                    <strong>Income:</strong> {{ household.income }}
+                </li>
+            {% empty %}
+                <li>No households found.</li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'monitor_dashboard' monitor_id %}" class="back-button">Back to Dashboard</a>
+    </div>
+</body>
+</html>

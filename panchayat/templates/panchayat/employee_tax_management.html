@@ -1,0 +1,231 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tax Management - Employee Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+        .tax-records-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .tax-records-table th, .tax-records-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .tax-records-table th {
+            background-color: #f5f5f5;
+            font-weight: bold;
+        }
+        .tax-records-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        .tax-actions {
+            text-align: center;
+        }
+        .tax-actions a, .tax-actions button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+        .tax-actions a:hover, .tax-actions button:hover {
+            background-color: #219150;
+        }
+        .add-tax-form {
+            margin-top: 30px;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+        }
+        .add-tax-form h2 {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: #333;
+        }
+        .add-tax-form label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        .add-tax-form input[type="number"], .add-tax-form input[type="date"], .add-tax-form select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .add-tax-form button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .add-tax-form button:hover {
+            background-color: #219150;
+        }
+        .message { padding: 10px; margin-bottom: 15px; border-radius: 4px; }
+        .success { background-color: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background-color: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .back-button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            text-decoration: none;
+            display: inline-block;
+            margin-top: 20px;
+        }
+        .back-button:hover {
+            background-color: #219150;
+        }
+        .search-form {
+            margin-bottom: 20px;
+        }
+        .search-form input[type="text"] {
+            padding: 8px;
+            width: 300px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .search-form button {
+            padding: 8px 15px;
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .search-form button:hover {
+            background-color: #219150;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 style="background-color: #27ae60; color: white; padding: 10px; border-radius: 5px;">Tax Management</h1>
+        </div>
+
+        <form class="search-form" method="GET" action="{% url 'employee_tax_management' employee_id %}">
+            <input type="text" name="search" placeholder="Search by Tax ID, Citizen Name, Tax Type, or Status" value="{{ search_query }}">
+            <button type="submit">Search</button>
+        </form>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="message {{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <table class="tax-records-table">
+            <thead>
+                <tr>
+                    <th>Tax ID</th>
+                    <th>Citizen Name</th>
+                    <th>Tax Type</th>
+                    <th>Amount</th>
+                    <th>Due Date</th>
+                    <th>Status</th>
+                    <th>Last Paid</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tax in tax_records %}
+                <tr>
+                    <td>{{ tax.tax_id }}</td>
+                    <td>{{ tax.citizen_name }} (ID: {{ tax.citizen_id }})</td>
+                    <td>{{ tax.tax_type }}</td>
+                    <td>{{ tax.amount }}</td>
+                    <td>{{ tax.due_date }}</td>
+                    <td>{{ tax.status }}</td>
+                    <td>{{ tax.last_paid|default:"-" }}</td>
+                    <td class="tax-actions">
+                        <a href="{% url 'employee_tax_edit' tax.tax_id employee_id %}">Edit</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div class="add-tax-form">
+            <h2 style="background-color: #27ae60; color: white; padding: 10px; border-radius: 5px;">Add New Tax Record</h2>
+            <form method="post" action="{% url 'employee_tax_management' employee_id %}">
+                {% csrf_token %}
+                <label for="citizen_id">Citizen:</label>
+                <select id="citizen_id" name="citizen_id" required>
+                    {% for citizen in citizens %}
+                    <option value="{{ citizen.citizen_id }}">{{ citizen.name }} (ID: {{ citizen.citizen_id }})</option>
+                    {% endfor %}
+                </select>
+
+                <label for="tax_type">Tax Type:</label>
+                <select id="tax_type" name="tax_type" required>
+                    <option value="Property">Property Tax</option>
+                    <option value="Income">Income Tax</option>
+                    <option value="Water">Water Tax</option>
+                    <option value="Sanitation">Sanitation Tax</option>
+                </select>
+
+                <label for="amount">Amount:</label>
+                <input type="number" id="amount" name="amount" step="0.01" required>
+
+                <label for="due_date">Due Date:</label>
+                <input type="date" id="due_date" name="due_date" required>
+
+                <label for="status">Status:</label>
+                <select id="status" name="status" required>
+                    <option value="Pending">Pending</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Overdue">Overdue</option>
+                    <option value="Waived">Waived</option>
+                </select>
+
+                <button type="submit">Add Tax Record</button>
+            </form>
+        </div>
+        <a href="{% url 'employee_dashboard' employee_id %}" class="back-button">Back to Dashboard</a>
+    </div>
+</body>
+</html>

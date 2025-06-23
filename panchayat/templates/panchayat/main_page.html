@@ -1,0 +1,187 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Form</title>
+  <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css'>
+  <link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Poppins&display=swap'>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: "Poppins", sans-serif;
+    }
+
+    :root {
+      --primary-color: #27ae60;
+      --secondary-color: #ffffff;
+      --text-color: #333;
+      --background-color: #f5f5f5;
+      --hover-color: #1e8449;
+    }
+
+    body {
+      background-color: var(--background-color);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .main-header {
+      font-size: 25px;
+      background-color: var(--primary-color);
+      color: var(--secondary-color);
+      padding: 10px 250px;
+      border-radius: 5px;
+      margin-bottom: 50px;
+      text-align: center;
+    }
+    
+
+    .wrapper {
+      width: 100%;
+      max-width: 400px;
+      background-color: var(--secondary-color);
+      border-radius: 10px;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .login-header span {
+      font-size: 24px;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .input_box {
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    .input-field {
+      width: 100%;
+      padding: 10px 15px;
+      font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    .input-field:focus {
+      outline-color: var(--primary-color);
+    }
+
+    .label {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--text-color);
+    }
+
+    select.input-field {
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+    }
+
+    .input-submit {
+      width: 100%;
+      padding: 10px;
+      background-color: var(--primary-color);
+      color: var(--secondary-color);
+      border-radius: 5px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    .input-submit:hover {
+      background-color: var(--hover-color);
+    }
+    
+    .icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--text-color);
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .forgot-password {
+      text-align: center;
+      margin-top: 10px;
+    }
+
+    .forgot-password a {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.3s ease;
+    }
+
+    .forgot-password a:hover {
+      color: var(--hover-color);
+    }
+    
+  </style>
+</head>
+<body>
+<h1 class="main-header">Welcome to the Gram Panchayat Management System</h1>
+<div class="wrapper">
+  <div class="login_box">
+    <div class="login-header">
+    </div>
+
+    <form method="POST" action="{% url 'login' %}">
+      {% csrf_token %}
+      <div class="input_box">
+        <label for="user" class="label">Username</label>
+        <input type="text" id="user" name="user" class="input-field" required>
+        <i class="bx bx-user icon"></i>
+      </div>
+
+      <div class="input_box">
+        <label for="pass" class="label">Password</label>
+        <input type="password" id="pass" name="pass" class="input-field" required>
+        <i class="bx bx-low-vision icon" onclick="togglePasswordVisibility()"></i>
+      </div>
+
+      <div class="input_box">
+        <label for="role" class="label">Role</label>
+        <select id="role" name="role" class="input-field" required>
+          <option value="" disabled selected>Select your role</option>
+          <option value="citizen">Citizen</option>
+          <option value="employee">Employee</option>
+          <option value="government_monitor">Government Monitor</option>
+          <option value="admin">System Admin</option>
+        </select>
+      </div>
+
+      <div class="input_box">
+        <input type="submit" class="input-submit" value="Login">
+      </div>
+    </form>
+    <div class="forgot-password">
+      <a href="{% url 'forgot_password' %}">Forgot Password?</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  function togglePasswordVisibility() {
+    var passwordInput = document.getElementById('pass');
+    passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+  }
+</script>
+</body>
+</html>
